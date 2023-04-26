@@ -1,6 +1,7 @@
 # Example Project Repository
 
-An example repository for Earth Analytics Certificate projects
+Begining repository for Earth Analytics Certificate project - Julia and Lindsay's watershed project
+For Final Project due next week we need to add project descrtiption, environement with RiverREM, and ipynb with code to download and plot 2 data sets (idea is to use hwy93 DTMs (either download from watershed center webpage? or uplaod to github) and plot with RiverREM)
 
 ## Project Description
 What are goals, methods? Message Box, etc.
