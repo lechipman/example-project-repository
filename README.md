@@ -6,6 +6,8 @@ An example repository for Earth Analytics Certificate projects
 What are goals, methods? Message Box, etc.
 
 ## Collaborators and Acknowledgements
+
+## Use zenodo to create persistent url (doi)
 etc.
 
 ## Environment Requirements
