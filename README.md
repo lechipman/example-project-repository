@@ -5,6 +5,9 @@ An example repository for Earth Analytics Certificate projects
 ## Project Description
 What are goals, methods? Message Box, etc.
 
+## Collaborators and Acknowledgements
+etc.
+
 ## Environment Requirements
 How to install your environment
   * Start with instructions for installing the ea-python environment (see - https://www.earthdatascience.org/workshops/setup-earth-analytics-python/setup-python-conda-earth-analytics-environment/)
