@@ -7,7 +7,7 @@ What are goals, methods? Message Box, etc.
 
 ## Collaborators and Acknowledgements
 
-## Use zenodo to create persistent url (doi)
+## Use zenodo to create persistent url (doi), can also upload data but file size may be too large (50MB max)
 etc.
 
 ## Environment Requirements
