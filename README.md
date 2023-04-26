@@ -29,3 +29,4 @@ Complete instrucitons for accesing enough data to run the workflow.
   * * Data must include citations
 
 > If you need to process raw data before sending it out, you can include a notebook or script for that, that I will not run.
+> Include code to access 2 data sources and plot; if can't use the download, talk with Elsa for alternative
