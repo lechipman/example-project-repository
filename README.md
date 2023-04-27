@@ -12,13 +12,13 @@ We will use two types of data in our analysis:
 1) UAV imagery (to process in Agisoft and create DTM), source: DJI Phantom 4, collected Fall 2022
 2) LiDAR data (downloaded as DTM), source: Colorado Hazard Mapping, Airborne Snow Observatories
 
-For each of these datasets, we will create digital elevation models (DEM), and digital terrain models (DTM; DEM with vegetation removed) for each site using Agisoft software. (for the lidar data, we may also use download an already created DEM/DTM available from the ![Colorado Hazard site(https://coloradohazardmapping.com/lidarDownload). We will then create relative elevation models for the five DTMs with two different methods. THe first method follows the watershed center's protocol, which relies on using the Colorado Water Conservation Board’s REM Generator Tool in ArcMap to create the REM. We would use this for both UAV- and LiDAR-derived DTMs and compare the results. The second method is to use python tools (notably the RiverREM package) to create the REM.
+For each of these datasets, we will create digital elevation models (DEM), and digital terrain models (DTM; DEM with vegetation removed) for each site using Agisoft software. (for the lidar data, we may also use download an already created DEM/DTM available from the [Colorado Hazard site(https://coloradohazardmapping.com/lidarDownload). We will then create relative elevation models for the five DTMs with two different methods. THe first method follows the watershed center's protocol, which relies on using the Colorado Water Conservation Board’s REM Generator Tool in ArcMap to create the REM. We would use this for both UAV- and LiDAR-derived DTMs and compare the results. The second method is to use python tools (notably the RiverREM package) to create the REM.
 
 Our end products are a REM and histogram for each of the 5 sites, created from both UAV- and LiDAR-derived data as well as a qualitative and quantitative comparison between the two data sources to suggest which method is best for The Watershed Center to replicate Ultimately, we hope to replicate the watershed's existing process using python tools to  come up with an open and reproducible analysis for generating the REMs. Potential tools are: rasterio/rioxarray (to open and view DTMs), RiverREM (to create REM), and potentially others for plotting and reproducing data downloads and setting file paths/directories. We would use this for both UAV- and LiDAR-derived DTMs and compare.
 
 
 ## Collaborators and Acknowledgements
-Julia Sobczak, Lindsay Chipman, Matthew Bitters, the ![Watershed Center](https://watershed.center/)
+Julia Sobczak, Lindsay Chipman, Matthew Bitters, the [Watershed Center](https://watershed.center/)
 
 ## Use zenodo to create persistent url (doi), can also upload data but file size may be too large (50MB max)
 etc.
