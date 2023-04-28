@@ -21,7 +21,7 @@ For each of these datasets, we will create digital elevation models (DEM), and d
 Our end products include an REM and histogram for each of the 5 sites, created from both UAV- and LiDAR-derived data as well as a qualitative and quantitative comparison between the two data sources to suggest which method is best for The Watershed Center to replicate Ultimately, we hope to replicate the watershed's existing process using python tools to  come up with an open and reproducible analysis for generating the REMs. Potential tools are: rasterio/rioxarray (to open and view DTMs), RiverREM (to create REM), and potentially others for plotting and reproducing data downloads and setting file paths/directories. We would use this for both UAV- and LiDAR-derived DTMs and compare.
 
 ### To do
-Use zenodo to create persistent url (doi), can also upload data but file size may be too large (50MB max)
+Use zenodo to create persistent url (doi), can also upload data but file size may be too large (50MB max per file, no cap on # of files)
 etc.
 
 ## Environment Requirements
