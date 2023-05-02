@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 # Import directories
@@ -17,7 +17,7 @@ import geopandas as gpd
 import requests
 
 
-# In[3]:
+# In[2]:
 
 
 # Set working directory
@@ -30,7 +30,7 @@ if not os.path.exists(working_dir):
 os.chdir(working_dir)
 
 
-# In[4]:
+# In[3]:
 
 
 # Download and import the site coordinates for plotting (saved on github)
@@ -52,7 +52,7 @@ sites_gdf = gpd.GeoDataFrame(
 sites_gdf.head()
 
 
-# In[10]:
+# In[4]:
 
 
 # Download and cache watershed boundary dataset 
@@ -81,7 +81,7 @@ if not os.path.exists(wbd_10_dir):
             wbd_zipfile.extractall(wbd_10_dir)
 
 
-# In[27]:
+# In[5]:
 
 
 # Select study area, St Vrain watershed, and save gdf
@@ -93,7 +93,7 @@ vrain_gdf = wbd_10_gdf[wbd_10_gdf.name.str.contains('Vrain')]
 vrain_crs_gdf = vrain_gdf.to_crs(crs = 'EPSG:4326')
 
 
-# In[22]:
+# In[6]:
 
 
 # Download Boulder County streams data and create gdf
@@ -121,7 +121,7 @@ if not os.path.exists(stream_dir):
             stream_zipfile.extractall(stream_dir)
 
 
-# In[28]:
+# In[7]:
 
 
 stream_gdf = gpd.read_file(stream_path)
@@ -133,50 +133,47 @@ stream_crs_gdf = stream_gdf.to_crs(crs = 'EPSG:4326')
 stream_clipped_gdf = stream_crs_gdf.clip(vrain_crs_gdf)
 
 
-# In[29]:
+# In[9]:
 
 
 # Plot Watershed and Streams
-fig, ax = plt.subplots(1, 1, figsize=(8, 16))
-ax.set_title("Site Locations in the St. Vrain Watershed",
-             pad=20,
-            fontsize=16)
+def plot_study_sites():
+    """Creates a map of study sites in the St. Vrain Watershed"""
+    
+    fig, ax = plt.subplots(1, 1, figsize=(8, 16))
+    ax.set_title("Site Locations in the St. Vrain Watershed",
+                 pad=20,
+                fontsize=16)
 
-stream_clipped_gdf.plot(ax=ax, color='blue')
-vrain_crs_gdf.plot(ax=ax, facecolor='cyan', alpha=0.5)
+    stream_clipped_gdf.plot(ax=ax, color='blue')
+    vrain_crs_gdf.plot(ax=ax, facecolor='cyan', alpha=0.5)
 
-site_symbol_dict = {
-    'AV GCP1': '*',
-    'HW93 GCP1': '*',
-    'LEG1-GCP1': '*',
-    'VV GCP1' : '*'
-}
+    site_symbol_dict = {
+        'AV GCP1': '*',
+        'HW93 GCP1': '*',
+        'LEG1-GCP1': '*',
+        'VV GCP1' : '*'
+    }
 
-site_name_dict = {
-    'AV GCP1': 'Apple Valley North',
-    'HW93 GCP1': 'Highway 93',
-    'LEG1-GCP1': 'Legacy 1',
-    'VV GCP1' : 'Van Vleet'
-}
-
-
-for i, gdf in sites_gdf.groupby('name'):
-    gdf.plot(ax=ax,
-             marker=site_symbol_dict[i],
-             label=site_name_dict[i],
-             markersize=150,
-            legend=True)
-
-ax.legend()
-ax.set_axis_off()
-plt.legend(bbox_to_anchor=(1, 1), loc='upper left', borderaxespad=0);
-#sites_gdf.plot(ax=ax, color='black', marker = 'x', markersize=40)
-
-cx.add_basemap(ax, crs=vrain_crs_gdf.crs, zoom=10)
+    site_name_dict = {
+        'AV GCP1': 'Apple Valley North',
+        'HW93 GCP1': 'Highway 93',
+        'LEG1-GCP1': 'Legacy 1',
+        'VV GCP1' : 'Van Vleet'
+    }
 
 
-# In[ ]:
+    for i, gdf in sites_gdf.groupby('name'):
+        gdf.plot(ax=ax,
+                 marker=site_symbol_dict[i],
+                 label=site_name_dict[i],
+                 markersize=150,
+                legend=True)
 
+    ax.legend()
+    ax.set_axis_off()
+    plt.legend(bbox_to_anchor=(1, 1), loc='upper left', borderaxespad=0);
+    #sites_gdf.plot(ax=ax, color='black', marker = 'x', markersize=40)
 
-
+    cx.add_basemap(ax, crs=vrain_crs_gdf.crs, zoom=10)
 
