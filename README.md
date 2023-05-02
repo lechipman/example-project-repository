@@ -1,8 +1,6 @@
 # Watershed Project Repository
 
-Beginning a shared repository for Julia and Lindsay's watershed project
-For Final Project due next week we need to add project descrtiption, environment with RiverREM, and ipynb with code to download and plot 2 data sets (idea is to use hwy93 DTMs (either download from watershed center webpage? or uplaod to github) and plot with RiverREM)
-
+Shared repository for Julia and Lindsay's watershed project
 
 ## Collaborators and Acknowledgements
 Julia Sobczak, Lindsay Chipman, Matthew Bitters, and the [Watershed Center](https://watershed.center/)
@@ -20,10 +18,6 @@ For each of these datasets, we will create digital elevation models (DEM), and d
 
 Our end products include an REM and histogram for each of the 5 sites, created from both UAV- and LiDAR-derived data as well as a qualitative and quantitative comparison between the two data sources to suggest which method is best for The Watershed Center to replicate Ultimately, we hope to replicate the watershed's existing process using python tools to  come up with an open and reproducible analysis for generating the REMs. Potential tools are: rasterio/rioxarray (to open and view DTMs), RiverREM (to create REM), and potentially others for plotting and reproducing data downloads and setting file paths/directories. We would use this for both UAV- and LiDAR-derived DTMs and compare.
 
-### To do
-Use zenodo to create persistent url (doi), can also upload data but file size may be too large (50MB max per file, no cap on # of files)
-etc.
-
 ## Environment Requirements
 How to install your environment
   * Start with [instructions for installing the ea-python environment](https://www.earthdatascience.org/workshops/setup-earth-analytics-python/setup-python-conda-earth-analytics-environment/)
@@ -32,16 +26,10 @@ How to install your environment
   ```bash
   conda install -c conda-forge riverrem
   ```
-  
-  * OR make your own environment.ymp file based on the earth analytics python one (e.g., edit existing file to add new packages, remove packages not needed); test first
+ 
+### To do
+  * Use zenodo to create persistent url (doi).
+  * Create own environment (e.g., edit earth analytics python env to add/remove packages)
 
 ## Data Access
-For next week's assignment, include complete instructions for accesing enough data to run the workflow.
-  * Working urls
-  * if url points at a web form, you must have complete info on what to fill in there
-  * If possible, you should host data or data subset on github (note, I thnk the DTM files are too large to host, but not sure if we can share the link to google drive for user to download?)
-  * * Data must include citations
-
-> If you need to process raw data before sending it out, you can include a notebook or script for that, that I will not run.
-> Include code to access 2 data sources and plot; if can't use the download, talk with Elsa for alternative
-
+  * For this assignment, we hosted preprocesed data on a github release. Data was from the [Watershed Center](https://watershed.center/)
