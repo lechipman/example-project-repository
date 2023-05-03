@@ -30,7 +30,7 @@ if not os.path.exists(working_dir):
 os.chdir(working_dir)
 
 
-# In[3]:
+# In[7]:
 
 
 # Download and import the site coordinates for plotting (saved on github)
@@ -41,7 +41,7 @@ download = requests.get(sites_url).content
 sites_df = pd.read_csv(io.StringIO(download.decode('utf-8')))
 
 # Select one location from each site to map
-sites_short_df = sites_df.iloc[[0,7,17,29]]
+sites_short_df = sites_df.iloc[[0,7,17,29, -1]]
 
 # Create gdf of study sites
 sites_gdf = gpd.GeoDataFrame(
@@ -49,10 +49,10 @@ sites_gdf = gpd.GeoDataFrame(
     geometry = gpd.points_from_xy(sites_short_df['lon'],
                                   sites_short_df['lat']),
                                   crs = 'EPSG:4326')
-sites_gdf.head()
+sites_gdf
 
 
-# In[4]:
+# In[10]:
 
 
 # Download and cache watershed boundary dataset 
@@ -81,7 +81,7 @@ if not os.path.exists(wbd_10_dir):
             wbd_zipfile.extractall(wbd_10_dir)
 
 
-# In[5]:
+# In[11]:
 
 
 # Select study area, St Vrain watershed, and save gdf
@@ -93,7 +93,7 @@ vrain_gdf = wbd_10_gdf[wbd_10_gdf.name.str.contains('Vrain')]
 vrain_crs_gdf = vrain_gdf.to_crs(crs = 'EPSG:4326')
 
 
-# In[6]:
+# In[12]:
 
 
 # Download Boulder County streams data and create gdf
@@ -121,7 +121,7 @@ if not os.path.exists(stream_dir):
             stream_zipfile.extractall(stream_dir)
 
 
-# In[7]:
+# In[13]:
 
 
 stream_gdf = gpd.read_file(stream_path)
@@ -133,11 +133,11 @@ stream_crs_gdf = stream_gdf.to_crs(crs = 'EPSG:4326')
 stream_clipped_gdf = stream_crs_gdf.clip(vrain_crs_gdf)
 
 
-# In[9]:
+# In[22]:
 
 
 # Plot Watershed and Streams
-def plot_study_sites():
+def plot_sites():
     """Creates a map of study sites in the St. Vrain Watershed"""
     
     fig, ax = plt.subplots(1, 1, figsize=(8, 16))
@@ -152,23 +152,25 @@ def plot_study_sites():
         'AV GCP1': '*',
         'HW93 GCP1': '*',
         'LEG1-GCP1': '*',
-        'VV GCP1' : '*'
+        'VV GCP1' : '*',
+        'HM' : '*'
     }
 
     site_name_dict = {
         'AV GCP1': 'Apple Valley North',
         'HW93 GCP1': 'Highway 93',
         'LEG1-GCP1': 'Legacy 1',
-        'VV GCP1' : 'Van Vleet'
+        'VV GCP1' : 'Van Vleet',
+        'HM' : 'Hall Meadows'
     }
-
 
     for i, gdf in sites_gdf.groupby('name'):
         gdf.plot(ax=ax,
                  marker=site_symbol_dict[i],
                  label=site_name_dict[i],
                  markersize=150,
-                legend=True)
+                legend=True,
+                zorder=3)
 
     ax.legend()
     ax.set_axis_off()
