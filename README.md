@@ -21,3 +21,4 @@ How to install your environment
 
 ## Data Access
   * For this assignment, we hosted preprocesed data on a github release. Data was from the [Watershed Center](https://watershed.center/)
+  * Please fork this repository and pull it to your local computer to run the code fully
