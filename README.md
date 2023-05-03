@@ -2,6 +2,11 @@
 
 Shared repository for Julia and Lindsay's watershed project (Spring 2023)
 
+Find our completed blog post at watershed_project.html or run it yourself with the watershed_project jupyter notebook.
+
+## Summary
+This notebook demonstrates an expoloratory effort in using Digital Terrain Models (DTM's) in GitHub and running the REMMaker tool to generate a Relative Elevation Model (REM) over one of five study sites (Highway 93, Boulder, CO) for the purposes of floodplain mapping.
+
 ## Collaborators and Acknowledgements
 Julia Sobczak, Lindsay Chipman, Matthew Bitters with the [Watershed Center](https://watershed.center/), and University of Colorado [Earth Lab](https://earthlab.colorado.edu/)
 
