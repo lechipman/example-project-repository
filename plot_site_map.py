@@ -42,6 +42,7 @@ sites_df = pd.read_csv(io.StringIO(download.decode('utf-8')))
 
 # Select one location from each site to map
 sites_short_df = sites_df.iloc[[0,7,17,29, -1]]
+raise ValueError(sites_short_df)
 
 # Create gdf of study sites
 sites_gdf = gpd.GeoDataFrame(
