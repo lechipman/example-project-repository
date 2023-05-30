@@ -24,4 +24,12 @@ How to install your environment
   * Please fork this repository and pull it to your local computer to run the code fully
 
 ## Workflow
- * Follow the environment installation instructions above. Run the jupyter notebook. It will import the needed librarys, including RiverREM and plot_site_map.py, as well as the data (hosted on github, see data access above) to run from start to finish. The result is a preliminary REM for one of the five study sites. 
+ * Follow the environment installation instructions above. Run the jupyter notebook. It will import the needed librarys, including RiverREM and plot_site_map.py, as well as the data (including the DTM and site coordinates hosted on github, see data access above) to run from start to finish. The result is a preliminary REM for one of the five study sites. 
+
+## File Descriptions
+* UAV_gps_coords.csv : the coordinates of the study sites
+* plot_site_map.ipynb: jupyter notebook with code to plot the study sites
+* plot_site_map.py : python file with code to plot the study sites
+* streamline_js_highway93.zip: shapefile of the streamline (not used in the current notebook version)
+* watershed_project.html : blog post with project overview and current progress
+* watershed_project.ipynb : jupyter notebook with project code and current progress
