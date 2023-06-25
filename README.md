@@ -1,11 +1,11 @@
 # Watershed Project Repository
 
-Shared repository for Julia and Lindsay's watershed project (Spring 2023)
+This is the repository for Julia and Lindsay's Earth Analytics Graduate Certificate Project (Spring-Summer 2023).
 
 Find our completed blog post at watershed_project.html or run it yourself with the watershed_project jupyter notebook.
 
 ## Summary
-This notebook demonstrates an expoloratory effort in using Digital Terrain Models (DTM's) in GitHub and running the REMMaker tool to generate a Relative Elevation Model (REM) over one of five study sites (Highway 93, Boulder, CO) for the purposes of floodplain mapping.
+This repositiory contains initial code, data, and instructions to demonstrate an expoloratory effort in using Digital Terrain Models (DTM's) saved in GitHub and running the REMMaker tool in the [RiverREM](https://github.com/OpenTopography/RiverREM) python library to generate a Relative Elevation Model (REM) over one of five study sites (Highway 93, Boulder, CO) for the purposes of floodplain mapping. The overall goal of the project is to create and compare REMs created from the RiverREM library and the [Colorado Hazard Mapping](https://coloradohazardmapping.com/) tool in ArcGIS. When complete, this project will provide an open, reporducible method to create REMs from existing DTMs. It will also compare the REMs created from DTMs generated from drone imagery with those created from LiDAR. This repository will provide information on the best ways to create REMs in terms of accuracy as well as effort, resources, etc.
 
 ## Collaborators and Acknowledgements
 Julia Sobczak, Lindsay Chipman, Matthew Bitters with the [Watershed Center](https://watershed.center/), and University of Colorado [Earth Lab](https://earthlab.colorado.edu/)
@@ -22,3 +22,14 @@ How to install your environment
 ## Data Access
   * For this assignment, we hosted preprocesed data on a github release. Data was from the [Watershed Center](https://watershed.center/)
   * Please fork this repository and pull it to your local computer to run the code fully
+
+## Workflow
+ * Follow the environment installation instructions above. Run the jupyter notebook. It will import the needed librarys, including RiverREM and plot_site_map.py, as well as the data (including the DTM and site coordinates hosted on github, see data access above) to run from start to finish. The result is a preliminary REM for one of the five study sites. 
+
+## File Descriptions
+* UAV_gps_coords.csv : the coordinates of the study sites
+* plot_site_map.ipynb: jupyter notebook with code to plot the study sites
+* plot_site_map.py : python file with code to plot the study sites
+* streamline_js_highway93.zip: shapefile of the streamline (not used in the current notebook version)
+* watershed_project.html : blog post with project overview and current progress
+* watershed_project.ipynb : jupyter notebook with project code and current progress
