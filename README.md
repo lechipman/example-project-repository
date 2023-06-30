@@ -27,7 +27,7 @@ How to install your environment
 ## Data Access
   * For this assignment, we hosted preprocesed data on a github release. Data was from the [Watershed Center](https://watershed.center/)
   * Please fork this repository and pull it to your local computer to run the code fully
-  * NOTE: for the .html file to save properly, please create a subfolder in your home computer called 'earth-analytics' and fork the repository to this subfolder so the path to the local repository is as follows: home/earth-analytiics/watershed-project
+  * NOTE: for the .html file to save properly, please create a subfolder in your home computer called 'earth-analytics' and fork the repository to this subfolder so the path to the local repository is as follows: home/earth-analytiics/watershed-project 
 
 ## Workflow
  * Follow the environment installation instructions above.
