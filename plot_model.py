@@ -4,13 +4,13 @@
 # In[1]:
 
 
-# Import packages
+# Imports
 import os
 
 import matplotlib.pyplot as plt
 
 
-# In[2]:
+# In[6]:
 
 
 # Function to plot Elevation models
@@ -31,8 +31,7 @@ def plot_model(model, title, coarsen):
 
     Returns
     -------
-    nwis_df: pd.DataFrame
-        The requested dischsrge data.
+    A plot of the elevation model with specified title.
     """
     
     fig, ax = plt.subplots(1, 1, figsize=(10, 6))
