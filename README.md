@@ -47,3 +47,5 @@ How to install your environment
 * watershed_project_summer23.ipynb : jupyter notebook with project code and current progress for summer semester, 2023
 * watershed_project_summer23.html : blog post with project overview and current progress summer semester, 2023
 * watershed_project_Spring23.ipynb : jupyter notebook with project code and current progress as of spring semester, 2023.
+
+[![DOI](https://zenodo.org/badge/633148424.svg)](https://zenodo.org/badge/latestdoi/633148424)
