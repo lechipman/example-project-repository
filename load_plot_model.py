@@ -59,7 +59,7 @@ def load_dtm(data_url, site_name, file_name):
 # In[3]:
 
 
-# Function to plot Elevation models
+# Function to plot elevation models
 def plot_model(model, title, coarsen):
     """
     Creates a plot of the DTM or REM.
@@ -100,4 +100,34 @@ def plot_model(model, title, coarsen):
 
     # Add title
     ax.set_title(title, fontsize=14)
+
+
+# In[4]:
+
+
+# Function to plot a histogram of the REM 
+def plot_hist(model, title, color):
+    """Creates a Histogram of Elevation Model Data
+    
+    Parameters
+    ----------
+    model: dataarray
+        The dataarray to plot.
+
+    title: str
+        The title of the plot.
+        
+    color: str
+        Desired color of the plot.
+        
+    Returns
+    -------
+    The histogram of the elevation model with specified title and color.
+    """
+
+    # Create REM histogram plot 
+    fig, ax = plt.subplots(figsize=(10, 6))
+    model.plot.hist(color=color, bins=20)
+    ax.set_title(title)
+    plt.show()
 
