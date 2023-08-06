@@ -26,11 +26,11 @@ How to install your environment
 
 ## Data Access
   * For this assignment, we hosted preprocesed data on a github release. Data was from the [Watershed Center](https://watershed.center/)
-  * Please fork this repository and pull it to your local computer to run the code fully
-  * NOTE: for the .html file to save properly, please create a subfolder in your home computer called 'earth-analytics' and fork the repository to this subfolder so the path to the local repository is as follows: home/earth-analytiics/watershed-project 
-
+  
 ## Workflow
  * Follow the environment installation instructions above.
+ * Fork this repository and clone it to your local computer to run the code fully; NOTE: for the .html file to save properly, please create a subfolder in your home computer called 'earth-analytics' and fork the repository to this subfolder so the path to the local repository is as follows: home/earth-analytics/watershed-project 
+
  * Open watershed_project_Spring23.ipynb from the main directory ([watershed-project](https://github.com/lechipman/watershed-project)).
  * Run the jupyter notebook by selecting Run All.
  * The code will import the needed libraries, including RiverREM and plot_site_map.py, as well as the data (including the DTM and site coordinates hosted on github, see data access above) to run from start to finish.
@@ -47,3 +47,5 @@ How to install your environment
 * watershed_project_summer23.ipynb : jupyter notebook with project code and current progress for summer semester, 2023
 * watershed_project_summer23.html : blog post with project overview and current progress summer semester, 2023
 * watershed_project_Spring23.ipynb : jupyter notebook with project code and current progress as of spring semester, 2023.
+
+[![DOI](https://zenodo.org/badge/633148424.svg)](https://zenodo.org/badge/latestdoi/633148424)
