@@ -60,7 +60,7 @@ def load_dtm(data_url, site_name, file_name):
 
 
 # Function to plot elevation models
-def plot_model(model, title, coarsen):
+def plot_model(model, title, coarsen, ax):
     """
     Creates a plot of the DTM or REM.
     
@@ -74,13 +74,14 @@ def plot_model(model, title, coarsen):
         
     coarsen: boolean
         True = coarsen data, False = do not coarsen.
+      
+    ax: axes
+        A matplotlib axes object.
 
     Returns
     -------
     A plot of the elevation model with specified title.
     """
-    
-    fig, ax = plt.subplots(1, 1, figsize=(10, 6))
 
     # Hide x and y axes labels and ticks
     ax.xaxis.set_tick_params(labelbottom=False)
@@ -100,7 +101,9 @@ def plot_model(model, title, coarsen):
 
     # Add title
     ax.set_title(title, fontsize=14)
-
+    
+    ax.legend('off')
+    ax.axis('off')
 
 # In[4]:
 
