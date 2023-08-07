@@ -8,6 +8,7 @@
 import os
 
 import matplotlib.pyplot as plt
+from riverrem.REMMaker import REMMaker, clear_osm_cache
 import requests
 import rioxarray as rxr
 
@@ -74,7 +75,7 @@ def plot_model(model, title, coarsen, ax):
         
     coarsen: boolean
         True = coarsen data, False = do not coarsen.
-      
+        
     ax: axes
         A matplotlib axes object.
 
@@ -105,6 +106,7 @@ def plot_model(model, title, coarsen, ax):
     ax.legend('off')
     ax.axis('off')
 
+
 # In[4]:
 
 
@@ -133,4 +135,54 @@ def plot_hist(model, title, color):
     model.plot.hist(color=color, bins=20)
     ax.set_title(title)
     plt.show()
+
+
+# In[5]:
+
+
+# Function to run REMMaker with UAV dtms
+def run_rem_maker(site_name, k=100):
+    """Function to run the REMMaker tool on UAV DTMs
+    
+    Parameters
+    -----------
+    site_name: str
+        Name of the site with existing DTM.
+    k: int
+        Number of interpolation points.
+        
+    Returns
+    ----------
+    '{site_name}_dtm_REM.tif': image saved locally
+        REM image file.
+    """
+    
+    # Input the DTM file path and desired output directory
+    override_cache = False
+    uav_dtm_path = os.path.join(site_name, ('{}_dtm.tif').format(site_name))
+    uav_out_dir = os.path.join(site_name, 'remmaker')
+    if (not os.path.exists(uav_out_dir)) or override_cache:
+            print('{} does not exist. Downloading...'.format(uav_out_dir))
+            os.makedirs(uav_out_dir)
+    uav_rem_path = os.path.join(uav_out_dir, 
+                                  ('{}_dtm_REM.tif').format(site_name))
+
+    # Run the REMMaker if the path to the REM does not already exist
+    if (not os.path.exists(uav_rem_path)) or override_cache:
+        rem_maker = REMMaker(dem=uav_dtm_path, 
+                             out_dir=uav_out_dir, 
+                             interp_pts=1000, 
+                             k=100)
+
+        # clear OSM cache
+        clear_osm_cache()
+
+        # create an REM
+        rem_maker.make_rem()
+
+        # create an REM visualization with the given colormap
+        rem_maker.make_rem_viz(cmap='mako_r')
+
+    else:
+        print('The REM already exists. Not running REMMaker')
 
