@@ -112,7 +112,7 @@ def plot_model(model, title, coarsen, ax):
 
 # Function to plot a histogram of the REM 
 def plot_hist(model, title, color):
-    """Creates a Histogram of Elevation Model Data
+    """Creates a Single Histogram of Elevation Model Data
     
     Parameters
     ----------
@@ -135,6 +135,46 @@ def plot_hist(model, title, color):
     model.plot.hist(color=color, bins=20)
     ax.set_title(title)
     plt.show()
+
+
+# In[ ]:
+
+
+def plot_hists(model, titles, main_title, color, fig, ax):
+    """Creates Multiple Histograms of Elevation Model Data
+    
+    Parameters
+    ----------
+    model: dataarray
+        The dataarray to plot.
+
+    titles: str
+        The title of the subplot.
+    
+    main_title: str
+        The main plot title.
+        
+    color: str
+        Desired color of the plot.
+    
+    fig: figure
+        A matplotlib figure object.
+    
+    ax: axes
+        A matplotlib axes object.
+
+        
+    Returns
+    -------
+    Histogram of elevation models with specified titles and color.
+    """
+    
+    model.plot.hist(color=color, bins=20, ax=ax)
+    ax.set_title(titles, fontsize=12)
+    ax.set(xlabel=None)
+    fig.suptitle(main_title, fontsize=16)
+    fig.supxlabel('Elevation (m)')
+    fig.supylabel('Frequency')
 
 
 # In[5]:
