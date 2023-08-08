@@ -43,14 +43,14 @@ def load_dtm(data_url, site_name, file_name):
         print('{} does not exist. Creating...'.format(data_dir))
         os.makedirs(data_dir)
 
-        if (not os.path.exists(data_path)) or override_cache:
-            print('{} does not exist. Downloading...'.format(data_path))
-            # Download full data file as zipfile
-            response = requests.get(data_url)
+    if (not os.path.exists(data_path)) or override_cache:
+        print('{} does not exist. Downloading...'.format(data_path))
+        # Download full data file as zipfile
+        response = requests.get(data_url)
 
-            # Write in respose content using context manager
-            with open(data_path, 'wb') as data_file:
-                data_file.write(response.content)
+        # Write in respose content using context manager
+        with open(data_path, 'wb') as data_file:
+            data_file.write(response.content)
     # Open and plot the DTM
     dtm = rxr.open_rasterio(data_path, masked=True)
               

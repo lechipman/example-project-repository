@@ -9,11 +9,8 @@
 import os
 import pathlib
 
-import matplotlib.pyplot as plt
-from load_plot_model import load_dtm, plot_model, plot_hists, plot_hist, run_rem_maker
-from riverrem.REMMaker import REMMaker, clear_osm_cache
+from load_plot_model import load_dtm
 import requests
-import rioxarray as rxr
 
 
 # In[2]:
