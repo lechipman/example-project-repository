@@ -6,6 +6,8 @@
 
 # Imports
 import os
+import pathlib
+import zipfile
 
 import matplotlib.pyplot as plt
 from riverrem.REMMaker import REMMaker, clear_osm_cache
@@ -17,15 +19,17 @@ import rioxarray as rxr
 
 
 # Function to download and load dtm as data array
-def load_dtm(data_url, site_name, file_name):
+def load_dtm(site_name, data_url, file_name):
     """Creates DataArray of Elevation Model Data
     
     Parameters
     ----------
+    site_name: str
+        The name of the site.
     data_url: str
-        Url to the desired data.
-    data_name: str
-        The name of the data.
+        Url to the dataset (a .tif or zipfile containing .asc and .prj).
+    file_name: str
+        The name of the datafile.
         
     Returns
     ---------
@@ -36,7 +40,7 @@ def load_dtm(data_url, site_name, file_name):
     
     override_cache = False
     data_dir = site_name
-    data_path = (os.path.join(data_dir, file_name))
+    data_path = os.path.join(data_dir, file_name)
     
     # Cache data file
     if not os.path.exists(data_dir):
@@ -51,17 +55,28 @@ def load_dtm(data_url, site_name, file_name):
         # Write in respose content using context manager
         with open(data_path, 'wb') as data_file:
             data_file.write(response.content)
-    # Open and plot the DTM
-    dtm = rxr.open_rasterio(data_path, masked=True)
-              
-    return dtm
+            
+    # If zip file, decompress
+    if '.zip' in file_name:
+        with zipfile.ZipFile(data_path, 'r') as lidar_zipfile:
+            lidar_zipfile.extractall(data_dir)
+        data_path=os.path.join(data_dir, 
+                               '{}_lidar'.format(site_name), 
+                               '{}_lidar.asc'.format(site_name))
+            
+    # Open and plot the UAV DTMs
+    try:
+        dtm = rxr.open_rasterio(data_path, masked=True)
+        return dtm
+    except:
+        print('file type not supported, open lidar dtm in next step')
 
 
 # In[3]:
 
 
 # Function to plot elevation models
-def plot_model(model, title, coarsen, ax):
+def plot_model(model, title, coarsen, ax, xpix=1, ypix=1):
     """
     Creates a plot of the DTM or REM.
     
@@ -72,6 +87,9 @@ def plot_model(model, title, coarsen, ax):
 
     title: str
         The title of the plot.
+    
+    xpix, ypix: int, int
+        The number of pixels to average with coarsen function.
         
     coarsen: boolean
         True = coarsen data, False = do not coarsen.
@@ -92,49 +110,15 @@ def plot_model(model, title, coarsen, ax):
 
     # If DTM, coarsen
     if coarsen == True:
-        model.coarsen(
-            x=3,
-            boundary='trim').mean().coarsen(
-                y=3,
-                boundary='trim').mean().squeeze()
+        model = (model.coarsen(x=xpix, y=ypix, boundary='trim')
+                 .mean().squeeze())
     # Plot DTM
     model.plot(ax=ax)
 
     # Add title
-    ax.set_title(title, fontsize=14)
-    
+    ax.set_title(title, fontsize=14) 
     ax.legend('off')
     ax.axis('off')
-
-
-# In[4]:
-
-
-# Function to plot a histogram of the REM 
-def plot_hist(model, title, color):
-    """Creates a Single Histogram of Elevation Model Data
-    
-    Parameters
-    ----------
-    model: dataarray
-        The dataarray to plot.
-
-    title: str
-        The title of the plot.
-        
-    color: str
-        Desired color of the plot.
-        
-    Returns
-    -------
-    The histogram of the elevation model with specified title and color.
-    """
-
-    # Create REM histogram plot 
-    fig, ax = plt.subplots(figsize=(10, 6))
-    model.plot.hist(color=color, bins=20)
-    ax.set_title(title)
-    plt.show()
 
 
 # In[ ]:
