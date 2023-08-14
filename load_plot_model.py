@@ -228,7 +228,7 @@ def run_rem_maker_lidar(site_name, k=100):
         
     Returns
     ----------
-    '{site_name}_dtm_REM.tif': image saved locally
+    '{site_name}_lidar_dtm_REM.tif': image saved locally
         REM image file.
     """
     
@@ -262,4 +262,40 @@ def run_rem_maker_lidar(site_name, k=100):
 
     else:
         print('The LiDAR REMMaker REM already exists. Not running REMMaker')
+
+
+# In[1]:
+
+
+# Function to add rems and dtms to dictionary dictionary
+def get_uav_dtms(site_data_dictionary):
+    """
+    Adds UAV info to dictionary.
+    
+    Parameters
+    -------------
+    site_data_dictionary: list
+        List of the dictionaries with site data.
+    
+    Returns
+    ------------
+    site_data_dictionary: list
+        List of dictionaries with dtm/rem url and filenames added.
+    
+    """
+    for site in site_data_dictionary:
+        site['uav_rem'] = load_dtm(data_url=('https://zenodo.org/record/'
+                                             '8218054/files/{}_uav_rem.tif?download=1'
+                                             .format(site['site_name'])), 
+                                     site_name=site['site_name'],
+                                     file_name=('{}_rem.tif'
+                                                .format(site['site_name'])))
+        site['uav_dtm'] = load_dtm(data_url=('https://zenodo.org/record/'
+                                             '8218054/files/{}_uav_dtm.tif?download=1'
+                                             .format(site['site_name'])), 
+                                     site_name=site['site_name'],
+                                     file_name=('{}_dtm.tif'
+                                                .format(site['site_name'])))
+            
+    return site_data_dictionary
 
