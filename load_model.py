@@ -18,6 +18,21 @@ import rioxarray as rxr
 # In[2]:
 
 
+# Set working directory
+working_dir = os.path.join(
+    pathlib.Path.home(), 'earth-analytics', 'data', 'watershed-project')
+
+# Try/Except Block   
+try:
+    os.chdir(working_dir)
+except:
+    print('{} does not exist. Creating...'.format(working_dir))
+    os.makedirs(working_dir)
+    os.chdir(working_dir)
+else:
+    print('{} is now the working directory'.format(working_dir))
+    
+
 # Function to download and load dtm as data array
 def load_dtm(site_name, data_url, file_name):
     """Creates DataArray of Elevation Model Data
@@ -142,35 +157,96 @@ def get_lidar_url(site_names):
 # In[ ]:
 
 
-# Function for opening and clipping the geotiff file
-def lidar_clip(site_name, lidar_dtm, clip_gdf):
+##Function to get the bounding polygon and save as gdf
+def get_boundary_gdf(data_url, site_name):
+    """Downloads boundary shapefiles and open as a gdf
+    
+    Parameters
+    ------------
+    data_url: str
+        Url for the boundary shapefiles (zipfile)
+    
+    site_name: str
+        The site name.
+        
+    Returns
+    ------------
+    gdf: geodataframe
+        A geodataframe containing the boundary geometry.
     """
-  Clips and reprojects the lidar raster to the area of interest (AOI)
-  using a supplied shapefile.
+    override_cache = False
+    data_path = os.path.join('shapefiles.zip')
+     
+    # Cache data file
+    if (not os.path.exists(data_path)) or override_cache:
+        print('{} does not exist. Downloading...'.format(data_path))
+        # Download full data file as zipfile
+        response = requests.get(data_url)
+
+        # Write in respose content using context manager
+        with open(data_path, 'wb') as data_file:
+            data_file.write(response.content)
+            
+    with zipfile.ZipFile(data_path, 'r') as shape_zipfile:
+        shape_zipfile.extractall(working_dir)
+    data_path=os.path.join('shapefiles',
+                           '{}_bounding_polygon'.format(site_name),
+                           'Bounding_Polygon.shp')
+    
+    # Open the bounding polygon as gdf
+    try:
+        gdf = gpd.read_file(data_path)
+        return gdf
+    except:
+        print('There is no bounding polygon for the {} site, ' 
+              'skipping this site'.format(site_name))
+        
+
+# In[ ]:
+
+
+# Function to clip the LiDAR and UAV DTMs to the REM bounding polygon
+def dtm_clip(site_name, site_dtm, clip_gdf, is_lidar):
+    """
+  Clips the UAV and LiDAR DTM to the area of interest (AOI) using a 
+  supplied shapefile. Reprojects the LiDAR to match UAV CRS.
 
   Parameters
   ----------
-  lidar_dtm: DataArray
-      The dtm to clip.
+  site_name: Str
+      Name of the site.
+  site_dtm: DataArray
+      The lidar or uav dtm to clip.
   clip_gdf: Geodataframe
       GDF of the AOI.
+  is_lidar: Bool.
+      Is the dtm from lidar? True = yes, False = no.
 
   Returns
   -------
   clipped_dtm = DataArray
-      The preprocessed raster dataset.
+      The clipped raster dataset.
   """
-    raster_path=os.path.join('{}'.format(site_name), '{}_lidar_dtm.tif'.format(site_name))
-    reproject_dtm = lidar_dtm.rio.reproject("EPSG:4326")
-    clipped_dtm = (reproject_dtm
-                  .squeeze()
-                  .rio.clip(clip_gdf.geometry, crs=clip_gdf.crs))
-    # Save the clipped lidar dtm as raster for use in RiverREM
+
+    # If lidar file, set path and reproject
+    if is_lidar == True:  
+        raster_path=os.path.join('{}'.format(site_name), 
+                                 '{}_lidar_dtm.tif'.format(site_name))
+        site_dtm = site_dtm.rio.reproject("EPSG:4326")
+    
+    # else, if uav file, set path but don't reproject
+    else:
+        raster_path=os.path.join('{}'.format(site_name), 
+                                 '{}_dtm.tif'.format(site_name))   
+    
+    clipped_dtm = (site_dtm
+                   .squeeze()
+                   .rio.clip(clip_gdf.geometry, crs=clip_gdf.crs))
+    
+    # Save the clipped lidar dtm as raster for use in RiverREM function
     clipped_dtm.rio.to_raster(raster_path)
     
     return clipped_dtm
-
-
 # In[5]:
 
 
