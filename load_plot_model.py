@@ -72,93 +72,103 @@ def load_dtm(site_name, data_url, file_name):
         print('file type not supported, check your download')
 
 
-# In[3]:
+# In[1]:
 
 
-# Function to plot elevation models
-def plot_model(model, title, coarsen, ax, xpix=1, ypix=1):
+# Function to add rems and dtms to dictionary dictionary
+def get_uav_dtms(site_data_dictionary):
     """
-    Creates a plot of the DTM or REM.
+    Adds UAV info to dictionary.
     
     Parameters
-    ------------
-    model: dataarray
-        The dataarray to plot.
-
-    title: str
-        The title of the plot.
+    -------------
+    site_data_dictionary: list
+        List of the dictionaries with site data.
     
-    xpix, ypix: int, int
-        The number of pixels to average with coarsen function.
-        
-    coarsen: boolean
-        True = coarsen data, False = do not coarsen.
-        
-    ax: axes
-        A matplotlib axes object.
-
     Returns
-    -------
-    A plot of the elevation model with specified title.
+    ------------
+    site_data_dictionary: list
+        List of dictionaries with dtm/rem url and filenames added.
+    
     """
-
-    # Hide x and y axes labels and ticks
-    ax.xaxis.set_tick_params(labelbottom=False)
-    ax.yaxis.set_tick_params(labelleft=False)
-    ax.set_xticks([])
-    ax.set_yticks([])
-
-    # If DTM, coarsen
-    if coarsen == True:
-        model = (model.coarsen(x=xpix, y=ypix, boundary='trim')
-                 .mean().squeeze())
-    # Plot DTM
-    model.plot(ax=ax)
-
-    # Add title
-    ax.set_title(title, fontsize=14) 
-    ax.legend('off')
-    ax.axis('off')
+    for site in site_data_dictionary:
+        site['uav_rem'] = load_dtm(data_url=('https://zenodo.org/record/'
+                                             '8218054/files/{}_uav_rem.tif?download=1'
+                                             .format(site['site_name'])), 
+                                     site_name=site['site_name'],
+                                     file_name=('{}_rem.tif'
+                                                .format(site['site_name'])))
+        site['uav_dtm'] = load_dtm(data_url=('https://zenodo.org/record/'
+                                             '8218054/files/{}_uav_dtm.tif?download=1'
+                                             .format(site['site_name'])), 
+                                     site_name=site['site_name'],
+                                     file_name=('{}_dtm.tif'
+                                                .format(site['site_name'])))
+            
+    return site_data_dictionary
 
 
 # In[ ]:
 
 
-def plot_hists(model, titles, main_title, color, fig, ax):
-    """Creates Multiple Histograms of Elevation Model Data
+# Function to create dictionary to store info for lidar download
+def get_lidar_url(site_names):
+    """
+    Creates a dictionary to store info for lidar download
     
     Parameters
-    ----------
-    model: dataarray
-        The dataarray to plot.
-
-    titles: str
-        The title of the subplot.
+    -------------
+    site_names: list
+        List of the site names.
     
-    main_title: str
-        The main plot title.
-        
-    color: str
-        Desired color of the plot.
-    
-    fig: figure
-        A matplotlib figure object.
-    
-    ax: axes
-        A matplotlib axes object.
-
-        
     Returns
-    -------
-    Histogram of elevation models with specified titles and color.
-    """
+    ------------
+    site_lidar_urls: list
+        List of dictionaries with sitename, lidar url, and zip filename.
     
-    model.plot.hist(color=color, bins=20, ax=ax)
-    ax.set_title(titles, fontsize=12)
-    ax.set(xlabel=None)
-    fig.suptitle(main_title, fontsize=16)
-    fig.supxlabel('Elevation (m)')
-    fig.supylabel('Frequency')
+    """
+    site_lidar_urls = []
+    for site_name in site_names:
+        site_lidar_urls.append({
+            'site_name': site_name,
+            'lidar_url': ('https://github.com/lechipman/'
+                          'watershed-project/releases/download/v2.0.0/'
+                          '{}_lidar.zip'.format(site_name)),
+            'zip_filename': ('{}_lidar.zip'.format(site_name))
+    })
+    return site_lidar_urls
+
+
+# In[ ]:
+
+
+# Function for opening and clipping the geotiff file
+def lidar_clip(site_name, lidar_dtm, clip_gdf):
+    """
+  Clips and reprojects the lidar raster to the area of interest (AOI)
+  using a supplied shapefile.
+
+  Parameters
+  ----------
+  lidar_dtm: DataArray
+      The dtm to clip.
+  clip_gdf: Geodataframe
+      GDF of the AOI.
+
+  Returns
+  -------
+  clipped_dtm = DataArray
+      The preprocessed raster dataset.
+  """
+    raster_path=os.path.join('{}'.format(site_name), '{}_lidar_dtm.tif'.format(site_name))
+    reproject_dtm = lidar_dtm.rio.reproject("EPSG:4326")
+    clipped_dtm = (reproject_dtm
+                  .squeeze()
+                  .rio.clip(clip_gdf.geometry, crs=clip_gdf.crs))
+    # Save the clipped lidar dtm as raster for use in RiverREM
+    clipped_dtm.rio.to_raster(raster_path)
+    
+    return clipped_dtm
 
 
 # In[5]:
@@ -264,38 +274,91 @@ def run_rem_maker_lidar(site_name, k=100):
         print('The LiDAR REMMaker REM already exists. Not running REMMaker')
 
 
-# In[1]:
+# In[3]:
 
 
-# Function to add rems and dtms to dictionary dictionary
-def get_uav_dtms(site_data_dictionary):
+# Function to plot elevation models
+def plot_model(model, title, coarsen, ax, xpix=1, ypix=1):
     """
-    Adds UAV info to dictionary.
+    Creates a plot of the DTM or REM.
     
     Parameters
-    -------------
-    site_data_dictionary: list
-        List of the dictionaries with site data.
-    
-    Returns
     ------------
-    site_data_dictionary: list
-        List of dictionaries with dtm/rem url and filenames added.
+    model: dataarray
+        The dataarray to plot.
+
+    title: str
+        The title of the plot.
     
+    xpix, ypix: int, int
+        The number of pixels to average with coarsen function.
+        
+    coarsen: boolean
+        True = coarsen data, False = do not coarsen.
+        
+    ax: axes
+        A matplotlib axes object.
+
+    Returns
+    -------
+    A plot of the elevation model with specified title.
     """
-    for site in site_data_dictionary:
-        site['uav_rem'] = load_dtm(data_url=('https://zenodo.org/record/'
-                                             '8218054/files/{}_uav_rem.tif?download=1'
-                                             .format(site['site_name'])), 
-                                     site_name=site['site_name'],
-                                     file_name=('{}_rem.tif'
-                                                .format(site['site_name'])))
-        site['uav_dtm'] = load_dtm(data_url=('https://zenodo.org/record/'
-                                             '8218054/files/{}_uav_dtm.tif?download=1'
-                                             .format(site['site_name'])), 
-                                     site_name=site['site_name'],
-                                     file_name=('{}_dtm.tif'
-                                                .format(site['site_name'])))
-            
-    return site_data_dictionary
+
+    # Hide x and y axes labels and ticks
+    ax.xaxis.set_tick_params(labelbottom=False)
+    ax.yaxis.set_tick_params(labelleft=False)
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+    # If DTM, coarsen
+    if coarsen == True:
+        model = (model.coarsen(x=xpix, y=ypix, boundary='trim')
+                 .mean().squeeze())
+    # Plot DTM
+    model.plot(ax=ax)
+
+    # Add title
+    ax.set_title(title, fontsize=14) 
+    ax.legend('off')
+    ax.axis('off')
+
+
+# In[ ]:
+
+
+def plot_hists(model, titles, main_title, color, fig, ax):
+    """Creates Multiple Histograms of Elevation Model Data
+    
+    Parameters
+    ----------
+    model: dataarray
+        The dataarray to plot.
+
+    titles: str
+        The title of the subplot.
+    
+    main_title: str
+        The main plot title.
+        
+    color: str
+        Desired color of the plot.
+    
+    fig: figure
+        A matplotlib figure object.
+    
+    ax: axes
+        A matplotlib axes object.
+
+        
+    Returns
+    -------
+    Histogram of elevation models with specified titles and color.
+    """
+    
+    model.plot.hist(color=color, bins=20, ax=ax)
+    ax.set_title(titles, fontsize=12)
+    ax.set(xlabel=None)
+    fig.suptitle(main_title, fontsize=16)
+    fig.supxlabel('Elevation (m)')
+    fig.supylabel('Frequency')
 
